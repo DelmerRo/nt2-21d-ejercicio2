@@ -15,10 +15,10 @@
 <body>
     
 <div class="container-fluid mt-3" id="app">
-    <input type="text" class="form-control" v-model="busquedaPorNombreOApellido"
+    <input type="text" class="form-control" v-model="criterioDeBusquedaPorNombreOApellido"
         placeholder="Ingresar nombre o apellido para buscar... ">
        
-        <input type="text" class="form-control" v-model="busquedaPorDni"
+        <input type="text" class="form-control" v-model="criterioDeBusquedaPorDni"
         placeholder="Ingrese DNI para buscar...">
        
         <input type="text" class="form-control" v-model="criterioDeBusqueda"
@@ -27,7 +27,7 @@
     <br>
 <!--(if) Si hay un ingreso de minimo 3 caracteres(en el input de busqueda por nombre y apellido)
      mostrara la bussqueda por personas filtradas por Nombre o Apellido -->
-    <div class="media alert alert-info" v-for="(persona,index) in personasFiltradasPorNombreOApellido">
+    <div class="media alert alert-info" v-for="(persona,index) in personasFiltradasPorTodo">
         <img :src="persona.foto" width="150" :alt="persona.getNombreCompleto">
         <div class="media-body ml-3">
             <h5 class="mt-0"><u>Persona {{ index + 1 }}</u></h5>
@@ -56,7 +56,7 @@ mostrara ña busqueda filtrada por DNI -->
                 </div>
             </div>
 <!-- (else)de lo contrario mostrara todo las personas -->
-            <div class="media alert alert-info" v-for="(persona,index) in personasFiltradas">
+            <div class="media alert alert-info" v-for="(persona,index) in personasFiltradasPorTodo">
                 <img :src="persona.foto" width="150" :alt="persona.getNombreCompleto">
                 <div class="media-body ml-3">
                     <h5 class="mt-0"><u>Persona {{ index + 1 }}</u></h5>
@@ -82,8 +82,8 @@ mostrara ña busqueda filtrada por DNI -->
         el: '#app',
         data: {
             criterioDeBusqueda: '',
-            busquedaPorNombreOApellido:'',
-            busquedaPorDni:'',
+            criterioDeBusquedaPorNombreOApellido:'',
+            criterioDeBusquedaPorDni:'',
             //Aquí, en este array es donde tienen que agregar su información
             personas: [
                 {
@@ -121,12 +121,26 @@ mostrara ña busqueda filtrada por DNI -->
 
         },
         computed: {
-            personasFiltradas() {
+            personasFiltradasPorTodo() {
                 return this.personas.filter((persona) => {
                     let registroCompleto = `${persona.nombre} ${persona.apellido} ${persona.dni} ${persona.correo}`
                     return registroCompleto.toLowerCase().includes(this.criterioDeBusqueda.toLowerCase())
-                });
-            }
+                });  
+            },
+            personasFiltradasPorNombreOApellido() {
+                return this.personas.filter((persona) => {
+                    let registroCompleto = `${persona.nombre} ${persona.apellido}`
+                    return registroCompleto.toLowerCase().includes(this.criterioDeBusquedaPorNombreOApellido.toLowerCase())
+                });  
+            },
+            personasFiltradasPorDni() {
+                return this.personas.filter((persona) => {
+                    let registroCompleto = ` ${persona.dni}`
+                    return registroCompleto.toLowerCase().includes(this.criterioDeBusquedaPorDni.toLowerCase())
+                });  
+            },
+            
+
         },
         methods: {
             getNombreCompleto(persona) {
