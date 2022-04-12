@@ -12,14 +12,25 @@
 
 </head>
 
-
+<body>
+    
 <div class="container-fluid mt-3" id="app">
-    <input type="text" class="form-control" v-model="criterioDeBusqueda"
+    <input type="text" class="form-control" v-model="busquedaPorNombreOApellido"
+        placeholder="Ingresar nombre o apellido para buscar... ">
+       
+        <input type="text" class="form-control" v-model="busquedaPorDni"
+        placeholder="Ingrese DNI para buscar...">
+       
+        <input type="text" class="form-control" v-model="criterioDeBusqueda"
         placeholder="Ingresar un criterio de busqueda...">
+
     <br>
-    <div class="card-deck m-0">
-        <div class="row">
-            <div class="col" v-for="persona in personasFiltradas">
+<!--(if) Si hay un ingreso de minimo 3 caracteres(en el input de busqueda por nombre y apellido)
+     mostrara la bussqueda por personas filtradas por Nombre o Apellido -->
+    <div class="media alert alert-info" v-for="(persona,index) in personasFiltradasPorNombreOApellido">
+        <img :src="persona.foto" width="150" :alt="persona.getNombreCompleto">
+        <div class="media-body ml-3">
+            <h5 class="mt-0"><u>Persona {{ index + 1 }}</u></h5>
                 <div class="card mb-3">
                     <div class="card-body">
                         <h5 class="card-title">{{getNombreCompleto(persona)}}</h5>
@@ -29,10 +40,41 @@
                 </div>
             </div>
         </div>
+<!-- (else if) si no, si hay un ingreso de minimo 3 caracteres(en el input de  busqueda por dni)
+mostrara ña busqueda filtrada por DNI -->
+        <div class="media alert alert-info" v-for="(persona,index) in personasFiltradasPorDni">
+            <img :src="persona.foto" width="150" :alt="persona.getNombreCompleto">
+            <div class="media-body ml-3">
+                <h5 class="mt-0"><u>Persona {{ index + 1 }}</u></h5>
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">{{getNombreCompleto(persona)}}</h5>
+                            <p class="card-text">dni {{persona.dni}}</p>
+                            <a href="#" class="card-link">{{persona.correo}}</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+<!-- (else)de lo contrario mostrara todo las personas -->
+            <div class="media alert alert-info" v-for="(persona,index) in personasFiltradas">
+                <img :src="persona.foto" width="150" :alt="persona.getNombreCompleto">
+                <div class="media-body ml-3">
+                    <h5 class="mt-0"><u>Persona {{ index + 1 }}</u></h5>
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <h5 class="card-title">{{getNombreCompleto(persona)}}</h5>
+                                <p class="card-text">dni {{persona.dni}}</p>
+                                <a href="#" class="card-link">{{persona.correo}}</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
     </div>
 
 </div>
-
+</body>
 </html>
 
 <script>
@@ -40,19 +82,40 @@
         el: '#app',
         data: {
             criterioDeBusqueda: '',
+            busquedaPorNombreOApellido:'',
+            busquedaPorDni:'',
             //Aquí, en este array es donde tienen que agregar su información
             personas: [
                 {
                     nombre: "Daniel",
                     apellido: "Sanchez",
                     correo: "danielsanchez68@hotmail.com",
-                    dni: "20442873"
+                    dni: "20442873",
+                    foto: 'https://cdn3.iconfinder.com/data/icons/business-avatar-1/512/3_avatar-128.png' 
                 },
+
                 {
-                    nombre: "...",
-                    apellido: "...",
-                    correo: "...",
-                    dni: "..."
+                    nombre: "Delmer",
+                    apellido: "Rodriguez",
+                    correo: "jindrg@hotmail.com",
+                    dni: "94807935",
+                    foto: 'https://cdn3.iconfinder.com/data/icons/business-avatar-1/512/12_avatar-128.png' 
+                },
+
+                {
+                    nombre: "Melisa",
+                    apellido: "Mena",
+                    correo: "mena68@hotmail.com",
+                    dni: "21588855",
+                    foto: 'https://cdn3.iconfinder.com/data/icons/business-avatar-1/512/11_avatar-128.png' 
+                },
+
+                {
+                    nombre: "Maria",
+                    apellido: "Gonzales",
+                    correo: "Maru68@hotmail.com",
+                    dni: "45789966",
+                    foto: 'https://cdn3.iconfinder.com/data/icons/business-avatar-1/512/4_avatar-128.png' 
                 },
             ]
 
