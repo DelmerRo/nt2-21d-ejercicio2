@@ -1,36 +1,39 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Ejemplo 1</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>FILTRADO POR NOMBRE/APELLIDO Y DNI</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.min.js"></script>
-
+    <link rel="stylesheet" href="css/estilos.css">
 </head>
 
 <body>
-    
-<div class="container-fluid mt-3" id="app">
-    <input type="text" class="form-control" v-model="criterioDeBusquedaPorNombreOApellido"
-        placeholder="Ingresar nombre o apellido para buscar... ">
-       
-        <input type="text" class="form-control" v-model="criterioDeBusquedaPorDni"
-        placeholder="Ingrese DNI para buscar...">
-       
-        <input type="text" class="form-control" v-model="criterioDeBusqueda"
-        placeholder="Ingresar un criterio de busqueda...">
 
-    <br>
-<!--(if) Si hay un ingreso de minimo 3 caracteres(en el input de busqueda por nombre y apellido)
-     mostrara la bussqueda por personas filtradas por Nombre o Apellido -->
-    <div class="media alert alert-info" v-for="(persona,index) in personasFiltradasPorTodo">
-        <img :src="persona.foto" width="150" :alt="persona.getNombreCompleto">
-        <div class="media-body ml-3">
-            <h5 class="mt-0"><u>Persona {{ index + 1 }}</u></h5>
+    <div class="container-fluid mt-3" id="app">
+        <h1>FILTRADO POR NOMBRE/APELLIDO Y DNI</h1>
+        <hr>
+        <input type="text" class="form-control" v-model="criterioDeBusquedaPorNombreOApellido"
+            placeholder="Ingresar nombre o apellido para buscar... ">
+
+        <input type="text" class="form-control" v-model="criterioDeBusquedaPorDni"
+            placeholder="Ingrese DNI para buscar...">
+
+        <p v-show="criterioDeBusquedaPorDni.length + criterioDeBusquedaPorNombreOApellido.length < 3 "
+            class="alert alert-danger">Ingrese por lo menos 3 caracteres!!</p>
+        <br>
+
+
+        <div v-if="criterioDeBusquedaPorDni.length + criterioDeBusquedaPorNombreOApellido.length >=3"
+            class="media alert alert-info" v-for="(persona,index) in personasFiltradasPorNombreApellidoDni">
+            <img :src="persona.foto" width="150" :alt="persona.getNombreCompleto">
+            <div class="media-body ml-3">
+                <h5 class="mt-0"><u>Persona {{ index + 1 }}</u></h5>
                 <div class="card mb-3">
                     <div class="card-body">
                         <h5 class="card-title">{{getNombreCompleto(persona)}}</h5>
@@ -40,112 +43,28 @@
                 </div>
             </div>
         </div>
-<!-- (else if) si no, si hay un ingreso de minimo 3 caracteres(en el input de  busqueda por dni)
-mostrara ña busqueda filtrada por DNI -->
-        <div class="media alert alert-info" v-for="(persona,index) in personasFiltradasPorDni">
+
+        <!--de lo contrario mostrara todo las personas -->
+        <div v-if="criterioDeBusquedaPorDni.length + criterioDeBusquedaPorNombreOApellido.length <3"
+            class="media alert alert-info" v-for="(persona,index) in personasFiltradasPorTodo">
             <img :src="persona.foto" width="150" :alt="persona.getNombreCompleto">
             <div class="media-body ml-3">
                 <h5 class="mt-0"><u>Persona {{ index + 1 }}</u></h5>
-                    <div class="card mb-3">
-                        <div class="card-body">
-                            <h5 class="card-title">{{getNombreCompleto(persona)}}</h5>
-                            <p class="card-text">dni {{persona.dni}}</p>
-                            <a href="#" class="card-link">{{persona.correo}}</a>
-                        </div>
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">{{getNombreCompleto(persona)}}</h5>
+                        <p class="card-text">dni {{persona.dni}}</p>
+                        <a href="#" class="card-link">{{persona.correo}}</a>
                     </div>
                 </div>
             </div>
-<!-- (else)de lo contrario mostrara todo las personas -->
-            <div class="media alert alert-info" v-for="(persona,index) in personasFiltradasPorTodo">
-                <img :src="persona.foto" width="150" :alt="persona.getNombreCompleto">
-                <div class="media-body ml-3">
-                    <h5 class="mt-0"><u>Persona {{ index + 1 }}</u></h5>
-                        <div class="card mb-3">
-                            <div class="card-body">
-                                <h5 class="card-title">{{getNombreCompleto(persona)}}</h5>
-                                <p class="card-text">dni {{persona.dni}}</p>
-                                <a href="#" class="card-link">{{persona.correo}}</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-
+        </div>
     </div>
 
-</div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+
+    <script src="js/main.js"></script>
 </body>
+
 </html>
-
-<script>
-    new Vue({
-        el: '#app',
-        data: {
-            criterioDeBusqueda: '',
-            criterioDeBusquedaPorNombreOApellido:'',
-            criterioDeBusquedaPorDni:'',
-            //Aquí, en este array es donde tienen que agregar su información
-            personas: [
-                {
-                    nombre: "Daniel",
-                    apellido: "Sanchez",
-                    correo: "danielsanchez68@hotmail.com",
-                    dni: "20442873",
-                    foto: 'https://cdn3.iconfinder.com/data/icons/business-avatar-1/512/3_avatar-128.png' 
-                },
-
-                {
-                    nombre: "Delmer",
-                    apellido: "Rodriguez",
-                    correo: "jindrg@hotmail.com",
-                    dni: "94807935",
-                    foto: 'https://cdn3.iconfinder.com/data/icons/business-avatar-1/512/12_avatar-128.png' 
-                },
-
-                {
-                    nombre: "Melisa",
-                    apellido: "Mena",
-                    correo: "mena68@hotmail.com",
-                    dni: "21588855",
-                    foto: 'https://cdn3.iconfinder.com/data/icons/business-avatar-1/512/11_avatar-128.png' 
-                },
-
-                {
-                    nombre: "Maria",
-                    apellido: "Gonzales",
-                    correo: "Maru68@hotmail.com",
-                    dni: "45789966",
-                    foto: 'https://cdn3.iconfinder.com/data/icons/business-avatar-1/512/4_avatar-128.png' 
-                },
-            ]
-
-        },
-        computed: {
-            personasFiltradasPorTodo() {
-                return this.personas.filter((persona) => {
-                    let registroCompleto = `${persona.nombre} ${persona.apellido} ${persona.dni} ${persona.correo}`
-                    return registroCompleto.toLowerCase().includes(this.criterioDeBusqueda.toLowerCase())
-                });  
-            },
-            personasFiltradasPorNombreOApellido() {
-                return this.personas.filter((persona) => {
-                    let registroCompleto = `${persona.nombre} ${persona.apellido}`
-                    return registroCompleto.toLowerCase().includes(this.criterioDeBusquedaPorNombreOApellido.toLowerCase())
-                });  
-            },
-            personasFiltradasPorDni() {
-                return this.personas.filter((persona) => {
-                    let registroCompleto = ` ${persona.dni}`
-                    return registroCompleto.toLowerCase().includes(this.criterioDeBusquedaPorDni.toLowerCase())
-                });  
-            },
-            
-
-        },
-        methods: {
-            getNombreCompleto(persona) {
-                return `${persona.nombre} ${persona.apellido}`
-            }
-        }
-    });
-</script>
