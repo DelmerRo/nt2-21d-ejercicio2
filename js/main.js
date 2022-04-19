@@ -42,6 +42,10 @@ new Vue({
 
     },
     computed: {
+        cantidadDePersonas(){ 
+return this.personasFiltradasPorTodo.length 
+        },
+
         personasFiltradasPorTodo() {
             return this.personas.filter((persona) => {
                 let registroCompleto = `${persona.nombre} ${persona.apellido} ${persona.dni} ${persona.correo}`
